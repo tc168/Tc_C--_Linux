@@ -37,7 +37,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 	g_engine = new Advanced2D::Engine();
 	//let main program have a crack at things before window is created
 	if (!game_preload()) {
-		MessageBox(g_hWnd, "Error in game preload!", "Error", MB_OK);
+	MessageBox(g_hWnd, "Error in game preload!", "Error", MB_OK);
 		return 0;
 	}
 	//get window caption string from engine
@@ -61,7 +61,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = NULL;
 	wc.lpszMenuName = NULL;
-	wc.lpszClassName = title;
+    wc.lpszClassName = title;
 	wc.hIconSm = NULL;
 	//set up the window with the class info
 	RegisterClassEx(&wc);
@@ -76,7 +76,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 		dm.dmBitsPerPel = g_engine->getColorDepth();
 		dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 		if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) {
-			MessageBox(NULL, "Display mode failed", NULL, MB_OK);
+	MessageBox(NULL, "Display mode failed", NULL, MB_OK);
 			g_engine->setFullscreen(false);
 		}
 		dwStyle = WS_POPUP;
@@ -91,17 +91,17 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 	AdjustWindowRectEx(&windowRect, dwStyle, FALSE, dwExStyle);
 	//create the program window
 	g_hWnd = CreateWindowEx( 0,
-		title, //window class
-		title, //title bar
-		dwStyle | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-		0, 0, //x,y coordinate
-		windowRect.right - windowRect.left, //width of the window
-		windowRect.bottom - windowRect.top, //height of the window
-		0, //parent window
-		0, //menu
-		g_hInstance, //application instance
-		0); //window parameters
-	//was there an error creating the window?
+title, //window class
+title, //title bar
+dwStyle | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+0, 0, //x,y coordinate
+windowRect.right - windowRect.left, //width of the window
+windowRect.bottom - windowRect.top, //height of the window
+0, //parent window
+0, //menu
+g_hInstance, //application instance
+0); //window parameters
+
 	if (!g_hWnd) {
 		MessageBox(g_hWnd, "Error creating program window!", "Error", MB_OK);
 		return 0;

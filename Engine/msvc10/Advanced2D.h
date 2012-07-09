@@ -6,7 +6,7 @@
 #include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
-#include <dxerr9.h>
+////#include <dxerr9.h>
 #include "Timer.h"
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 0

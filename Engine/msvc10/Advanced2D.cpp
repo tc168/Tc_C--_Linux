@@ -58,7 +58,7 @@ namespace Advanced2D
 	{
 		//initialize Direct3D
 		this->p_d3d = Direct3DCreate9(D3D_SDK_VERSION);
-		if (this->p_d3d = = NULL) {
+		if (this->p_d3d == NULL) {
 			return 0;
 		}
 		//get system desktop color depth
@@ -85,12 +85,11 @@ namespace Advanced2D
 			D3DCREATE_HARDWARE_VERTEXPROCESSING,
 			&d3dpp,
 			&this->p_device);
-		if (this->p_device = = NULL) return 0;
+		if (this->p_device == NULL) return 0;
 		//clear the backbuffer to black
 		this->ClearScene(D3DCOLOR_XRGB(0,0,0));
 		//create pointer to the back buffer
-		this->p_device->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &this-
->p_ backbuffer);
+		this->p_device->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &this->p_backbuffer);
 		//use ambient lighting and z-buffering
 		this->p_device->SetRenderState(D3DRS_ZENABLE, TRUE);
 		this->p_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
@@ -145,7 +144,7 @@ namespace Advanced2D
 	{
 		static Timer timedUpdate;
 		//calculate core framerate
-		p_frameCount_core+ +;
+		p_frameCount_core++;
 		if (p_coreTimer.stopwatch(999)) {
 			p_frameRate_core = p_frameCount_core;
 			p_frameCount_core = 0;
@@ -161,7 +160,7 @@ namespace Advanced2D
 		}
 		else {
 			//calculate real framerate
-			p_frameCount_real+ +;
+			p_frameCount_real++;
 			if (p_realTimer.stopwatch(999)) {
 				p_frameRate_real = p_frameCount_real;
 				p_frameCount_real = 0;
