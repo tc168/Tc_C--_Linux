@@ -8,15 +8,19 @@
 #include <d3dx9.h>
 ////#include <dxerr9.h>
 #include "Timer.h"
+#include "Camera.h"
+#include "Mesh.h"
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 0
 #define REVISION 0
 //external variables and functions
+
 extern bool gameover;
 extern bool game_preload();
 extern bool game_init(HWND);
 extern void game_update();
 extern void game_end();
+extern void game_render3d();
 namespace Advanced2D
 {
 	class Engine {
@@ -54,6 +58,7 @@ namespace Advanced2D
 		void ClearScene(D3DCOLOR color);
 		void SetDefaultMaterial();
 		void SetAmbient(D3DCOLOR colorvalue);
+		void SetIdentity();		
 		int RenderStart();
 		int RenderStop();
 		int Release();

@@ -140,6 +140,13 @@ namespace Advanced2D
 	{
 		gameover = true;
 	}
+	 void Engine::SetIdentity()
+    {
+    	D3DXMATRIX matrixWorld;
+        D3DXMatrixIdentity(&matrixWorld);
+        g_engine->getDevice()->SetTransform(D3DTS_WORLD, &matrixWorld);
+    }
+
 	void Engine::Update()
 	{
 		static Timer timedUpdate;
@@ -167,7 +174,8 @@ namespace Advanced2D
 			}
 			//begin rendering
 			this->RenderStart();
-			//done rendering
+			//allow game to render
+			game_render3d();
 			this->RenderStop();
 		}
 	}

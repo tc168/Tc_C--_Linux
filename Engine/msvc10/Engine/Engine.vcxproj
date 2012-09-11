@@ -37,7 +37,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\lib</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>
@@ -99,11 +101,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Advanced2D.h" />
+    <ClInclude Include="..\Camera.h" />
+    <ClInclude Include="..\Mesh.h" />
     <ClInclude Include="..\Timer.h" />
     <ClInclude Include="..\winmain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Advanced2D.cpp" />
+    <ClCompile Include="..\Camera.cpp" />
+    <ClCompile Include="..\Mesh.cpp" />
     <ClCompile Include="..\Timer.cpp" />
     <ClCompile Include="..\winmain.cpp" />
   </ItemGroup>
