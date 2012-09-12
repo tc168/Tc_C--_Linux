@@ -1,52 +1,69 @@
 #include "..\Advanced2D.h"
-
 using namespace Advanced2D;
-Sprite *sprite;
+ParticleEmitter *p;
+Sprite *cursor;
 bool game_preload()
 {
-	g_engine->setAppTitle("SPRITE COLOR KEY DEMO");
+	g_engine->setAppTitle("INPUT DEMO");
 	g_engine->setFullscreen(false);
-	g_engine->setScreenWidth(640);
-	g_engine->setScreenHeight(480);
+	g_engine->setScreenWidth(1024);
+	g_engine->setScreenHeight(768);
 	g_engine->setColorDepth(32);
 	return 1;
 }
 bool game_init(HWND)
 {
-	//load sprite
-	sprite = new Sprite();
-	sprite->loadImage("explosion_30_128.tga");
-
-sprite->setTotalFrames(30);
-sprite->setColumns(6);
-sprite->setSize(128,128);
-sprite->setFrameTimer(40);
+	p = new ParticleEmitter();
+	p->loadImage("particle16.tga");
+	p->setMax(0);
+	p->setAlphaRange(50,200);
+	p->setDirection(1);
+	p->setSpread(270);
+	p->setScale(1.5f);
+	p->setLength(2000);
+	//load cursor
+	cursor = new Sprite();
+	cursor->loadImage("particle16.tga");
 	return true;
 }
 void game_update()
 {
-	sprite->animate();
-	//exit when escape key is pressed
-	//if (KEY_DOWN(VK_ESCAPE)) g_engine->Close();
+	p->update();
 }
-void game_end()
+void game_keyPress(int key) { }
+void game_keyRelease(int key)
 {
-	delete sprite;
+	if (key == DIK_ESCAPE) g_engine->Close();
 }
+void game_mouseButton(int button)
+{
+	switch(button) {
+	case 0: //button 1
+		p->setVelocity( (rand() % 10 - 5) / 50.0f );
+		p->add();
+		break;
+	}
+}
+void game_mouseMotion(int x,int y) { }
+void game_mouseMove(int x,int y)
+{
+	float fx = (float)x;
+	float fy = (float)y;
+	cursor->setPosition(fx,fy);
+	p->setPosition(fx,fy);
+}
+void game_mouseWheel(int wheel) { }
 void game_render3d()
 {
-	g_engine->ClearScene(D3DCOLOR_XRGB(0,0,80));
-	g_engine->SetIdentity();
+	g_engine->ClearScene(D3DCOLOR_XRGB(0,0,0));
 }
 void game_render2d()
 {
-	//calculate center of screen
-	int cx = g_engine->getScreenWidth() / 2;
-	int cy = g_engine->getScreenHeight() / 2;
-	//calculate center of sprite
-	int sx = sprite->getWidth() / 2;
-	int sy = sprite->getHeight() / 2;
-	//draw sprite centered
-	sprite->setPosition(cx-sx,cy-sy);
-	sprite->draw();
+	p->draw();
+	cursor->draw();
+}
+void game_end()
+{
+	delete p;
+	delete cursor;
 }

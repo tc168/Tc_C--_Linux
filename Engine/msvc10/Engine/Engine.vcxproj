@@ -102,8 +102,10 @@
   <ItemGroup>
     <ClInclude Include="..\Advanced2D.h" />
     <ClInclude Include="..\Camera.h" />
+    <ClInclude Include="..\Input.h" />
     <ClInclude Include="..\Light.h" />
     <ClInclude Include="..\Mesh.h" />
+    <ClInclude Include="..\ParticleEmitter.h" />
     <ClInclude Include="..\Sprite.h" />
     <ClInclude Include="..\Texture.h" />
     <ClInclude Include="..\Timer.h" />
@@ -113,8 +115,10 @@
   <ItemGroup>
     <ClCompile Include="..\Advanced2D.cpp" />
     <ClCompile Include="..\Camera.cpp" />
+    <ClCompile Include="..\Input.cpp" />
     <ClCompile Include="..\Light.cpp" />
     <ClCompile Include="..\Mesh.cpp" />
+    <ClCompile Include="..\ParticleEmitter.cpp" />
     <ClCompile Include="..\Sprite.cpp" />
     <ClCompile Include="..\Texture.cpp" />
     <ClCompile Include="..\Timer.cpp" />
