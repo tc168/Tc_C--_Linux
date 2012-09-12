@@ -1,70 +1,52 @@
-#include <iostream>
-#include "../Vector3.h"
-using namespace std;
+#include "..\Advanced2D.h"
 
-int main(int argc, char *argv[])
+using namespace Advanced2D;
+Sprite *sprite;
+bool game_preload()
 {
-	cout << "VECTOR TEST" << endl;
+	g_engine->setAppTitle("SPRITE COLOR KEY DEMO");
+	g_engine->setFullscreen(false);
+	g_engine->setScreenWidth(640);
+	g_engine->setScreenHeight(480);
+	g_engine->setColorDepth(32);
+	return 1;
+}
+bool game_init(HWND)
+{
+	//load sprite
+	sprite = new Sprite();
+	sprite->loadImage("explosion_30_128.tga");
 
-	Vector3 A(5,5,1);
-	cout << "A = " << A.getX() << "," 
-		<< A.getY() << "," << A.getZ() << endl;
-
-	Vector3 B(90,80,1);
-	cout << "B = " << B.getX() << "," 
-		<< B.getY() << "," << B.getZ() << endl;
-
-	cout << "Distance A to B: " 
-		<< A.Distance( B ) << endl;
-
-	cout << "Length of A: " << A.Length() << endl;
-	cout << "Length of B: " << B.Length() << endl;
-
-	A.Move(5, 0, 0);
-	cout << "A moved: " << A.getX() << "," 
-		<< A.getY() << "," << A.getZ() << endl;
-
-	Vector3 C = A;
-	cout << "C = " << C.getX() << "," << C.getY() 
-		<< "," << C.getZ() << endl;
-
-	cout << "Dot Product of A and B: " 
-		<< A.DotProduct(B) << endl;
-
-	Vector3 D = A.CrossProduct(B);
-	cout << "Cross Product of A and B: " << D.getX() 
-		<< "," << D.getY() << "," << D.getZ() << endl;
-
-	D = A.Normal();
-	cout << "Normal of A: " << D.getX() << "," 
-		<< D.getY() << "," << D.getZ() << endl;
-
-	A.Set(2.1,2.2,2.3);
-	B.Set(3.1,3.2,3.3);
-	cout << "A = " << A.getX() << "," << A.getY() 
-		<< "," << A.getZ() << endl;
-	cout << "B = " << B.getX() << "," << B.getY() 
-		<< "," << B.getZ() << endl;
-
-	A += B;
-	cout << "A + B: " << A.getX() << "," << A.getY() 
-		<< "," << A.getZ() << endl;
-
-	A -= B;
-	cout << "A - B: " << A.getX() << "," << A.getY() 
-		<< "," << A.getZ() << endl;
-
-	A *= B;
-	cout << "A * B: " << A.getX() << "," << A.getY() 
-		<< "," << A.getZ() << endl;
-
-	A /= B;
-	cout << "A / B: " << A.getX() << "," << A.getY() 
-		<< "," << A.getZ() << endl;
-
-	cout << "A == B: " << (A == B) << endl;
-	
-	system("pause");
-
-	return 0;
+sprite->setTotalFrames(30);
+sprite->setColumns(6);
+sprite->setSize(128,128);
+sprite->setFrameTimer(40);
+	return true;
+}
+void game_update()
+{
+	sprite->animate();
+	//exit when escape key is pressed
+	//if (KEY_DOWN(VK_ESCAPE)) g_engine->Close();
+}
+void game_end()
+{
+	delete sprite;
+}
+void game_render3d()
+{
+	g_engine->ClearScene(D3DCOLOR_XRGB(0,0,80));
+	g_engine->SetIdentity();
+}
+void game_render2d()
+{
+	//calculate center of screen
+	int cx = g_engine->getScreenWidth() / 2;
+	int cy = g_engine->getScreenHeight() / 2;
+	//calculate center of sprite
+	int sx = sprite->getWidth() / 2;
+	int sy = sprite->getHeight() / 2;
+	//draw sprite centered
+	sprite->setPosition(cx-sx,cy-sy);
+	sprite->draw();
 }

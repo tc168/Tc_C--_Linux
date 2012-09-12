@@ -1,8 +1,8 @@
-//#include "Advanced2D.h"
+#include "Advanced2D.h"
 #include <cmath>
 #include "Vector3.h"
 
-//namespace Advanced2D {
+namespace Advanced2D {
 
 	Vector3::Vector3()
 	{
@@ -123,4 +123,4 @@
 	}
 
 
-//}
+}
