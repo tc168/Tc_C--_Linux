@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Mesh.h"
 #include "Vector3.h"
+#include "Light.h"
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 0
 #define REVISION 0

@@ -102,6 +102,7 @@
   <ItemGroup>
     <ClInclude Include="..\Advanced2D.h" />
     <ClInclude Include="..\Camera.h" />
+    <ClInclude Include="..\Light.h" />
     <ClInclude Include="..\Mesh.h" />
     <ClInclude Include="..\Timer.h" />
     <ClInclude Include="..\Vector3.h" />
@@ -110,6 +111,7 @@
   <ItemGroup>
     <ClCompile Include="..\Advanced2D.cpp" />
     <ClCompile Include="..\Camera.cpp" />
+    <ClCompile Include="..\Light.cpp" />
     <ClCompile Include="..\Mesh.cpp" />
     <ClCompile Include="..\Timer.cpp" />
     <ClCompile Include="..\Vector3.cpp" />
