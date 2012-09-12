@@ -33,7 +33,7 @@ namespace Advanced2D {
 	public:
 		Mesh(void);
 		~Mesh(void);
-		void move();
+		//void move();
 		void animate() { }
 		void draw();
 	

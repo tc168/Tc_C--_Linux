@@ -104,6 +104,7 @@
     <ClInclude Include="..\Camera.h" />
     <ClInclude Include="..\Mesh.h" />
     <ClInclude Include="..\Timer.h" />
+    <ClInclude Include="..\Vector3.h" />
     <ClInclude Include="..\winmain.h" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +112,7 @@
     <ClCompile Include="..\Camera.cpp" />
     <ClCompile Include="..\Mesh.cpp" />
     <ClCompile Include="..\Timer.cpp" />
+    <ClCompile Include="..\Vector3.cpp" />
     <ClCompile Include="..\winmain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
