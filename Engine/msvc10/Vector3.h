@@ -1,8 +1,8 @@
-#include "Advanced2D.h"
+//#include "Advanced2D.h"
 
 #pragma once
 
-namespace Advanced2D {
+//namespace Advanced2D {
 
 	class Vector3 {
 	private:
@@ -35,6 +35,6 @@ namespace Advanced2D {
 		Vector3 CrossProduct( const Vector3& v );
 		Vector3 Normal();
 	}; //class
-};
+//};
 
 

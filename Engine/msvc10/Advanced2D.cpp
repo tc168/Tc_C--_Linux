@@ -136,16 +136,29 @@ namespace Advanced2D
 		if (p_device->Present(NULL, NULL, NULL, NULL) != D3D_OK) return 0;
 		return 1;
 	}
+
+	int Engine::Render2D_Start()
+	{
+		if (p_sprite_handler->Begin(D3DXSPRITE_ALPHABLEND) != D3D_OK)
+			return 0;
+		else
+			return 1;
+	}
+	int Engine::Render2D_Stop()
+	{
+		p_sprite_handler->End();
+		return 1;
+	}
 	void Engine::Shutdown()
 	{
 		gameover = true;
 	}
-	 void Engine::SetIdentity()
-    {
-    	D3DXMATRIX matrixWorld;
-        D3DXMatrixIdentity(&matrixWorld);
-        g_engine->getDevice()->SetTransform(D3DTS_WORLD, &matrixWorld);
-    }
+	void Engine::SetIdentity()
+	{
+		D3DXMATRIX matrixWorld;
+		D3DXMatrixIdentity(&matrixWorld);
+		g_engine->getDevice()->SetTransform(D3DTS_WORLD, &matrixWorld);
+	}
 
 	void Engine::Update()
 	{
@@ -176,6 +189,10 @@ namespace Advanced2D
 			this->RenderStart();
 			//allow game to render
 			game_render3d();
+
+			Render2D_Start();
+			game_render2d();
+			Render2D_Stop();
 			this->RenderStop();
 		}
 	}

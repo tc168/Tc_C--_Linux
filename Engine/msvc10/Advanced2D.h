@@ -10,7 +10,7 @@
 #include "Timer.h"
 #include "Camera.h"
 #include "Mesh.h"
-#include "Vector3.h"
+//#include "Vector3.h"
 #include "Light.h"
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 0
@@ -23,6 +23,7 @@ extern bool game_init(HWND);
 extern void game_update();
 extern void game_end();
 extern void game_render3d();
+extern void game_render2d();
 namespace Advanced2D
 {
 	class Engine {
@@ -63,6 +64,8 @@ namespace Advanced2D
 		void SetIdentity();		
 		int RenderStart();
 		int RenderStop();
+		int Render2D_Start();
+		int Render2D_Stop();
 		int Release();
 		//accessor/mutator functions expose the private variables
 		bool isPaused() { return this->p_pauseMode; }
