@@ -1,24 +1,30 @@
 // Advanced2D Engine
 // Main header file
 
-#ifndef _ADVANCED2D_H
-#define _ADVANCED2D_H 1
+#pragma once
+
+#define WIN32_EXTRA_LEAN
+#include <windows.h>
 
 #include <iostream>
 #include <list>
 #include <vector>
-#include <cstdlib>
-#include <ctime>
 #include <string>
 #include <sstream>
+#include <fstream>
+
+#include <ctime>
+#include <cstdio>
+#include <cstdlib>
 #include <ctime>
 #include <cmath>
-#include <windows.h>
+
+#define DIRECTINPUT_VERSION 0x0800
 #include <d3d9.h>
 #include <d3dx9.h>
 //#include <dxerr9.h>
 #include <dinput.h>
-#include "winmain.h"
+
 #include "Timer.h"
 #include "Camera.h"
 #include "Mesh.h"
@@ -30,6 +36,8 @@
 #include "Input.h"
 #include "fmod.hpp"
 #include "Audio.h"
+#include "Entity.h"
+#include "Font.h"
 
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 0
@@ -45,12 +53,15 @@ extern void game_end();
 extern void game_render3d();
 extern void game_render2d();
 
-extern void game_keyPress(int key);
-extern void game_keyRelease(int key);
-extern void game_mouseButton(int button);
-extern void game_mouseMotion(int x,int y);
-extern void game_mouseMove(int x,int y);
-extern void game_mouseWheel(int wheel);
+extern void game_keyPress(int);
+extern void game_keyRelease(int);
+extern void game_mouseButton(int);
+extern void game_mouseMotion(int,int);
+extern void game_mouseMove(int,int);
+extern void game_mouseWheel(int);
+
+extern void game_entityUpdate(Advanced2D::Entity*);
+extern void game_entityRender(Advanced2D::Entity*);
 
 //macro to read the keyboard asynchronously
 #define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000)?1:0)
@@ -85,6 +96,13 @@ namespace Advanced2D
 		void UpdateKeyboard();
 		void UpdateMouse();
 
+		void TestForCollisions();
+		void UpdateEntities();
+		void Draw2DEntities();
+		void Draw3DEntities();
+		void BuryEntities();
+
+		std::list<Entity*> p_entities;
 
 	public:
 		Engine();
@@ -145,6 +163,14 @@ namespace Advanced2D
 
 		bool getMaximizeProcessor() { return this->p_maximizeProcessor; }
 		void setMaximizeProcessor(bool value) { this->p_maximizeProcessor = value; }
+
+
+		std::list<Entity*> getEntityList() { return p_entities; }
+		long getEntityCount() { return (long)p_entities.size(); }
+		void addEntity(Entity *entity);
+		Entity *findEntity(std::string name);
+		Entity *findEntity(int objectType);
+
 		
 	}; //class
 
@@ -154,6 +180,4 @@ namespace Advanced2D
  
 //define the global engine object (visible everywhere!)
 extern Advanced2D::Engine *g_engine;
-
-#endif
 

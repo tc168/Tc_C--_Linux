@@ -1,14 +1,12 @@
 #include "Advanced2D.h"
-
+#include "Entity.h"
 
 #pragma once
 
 
-//***mod--floats to doubles
-
 namespace Advanced2D {
 
-	class Mesh
+	class Mesh : public Entity
 	{
 	private:
 	    LPD3DXMESH mesh;
@@ -33,7 +31,7 @@ namespace Advanced2D {
 	public:
 		Mesh(void);
 		~Mesh(void);
-		//void move();
+		void move();
 		void animate() { }
 		void draw();
 	

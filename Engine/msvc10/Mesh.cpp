@@ -2,7 +2,7 @@
 
 namespace Advanced2D {
 
-	Mesh::Mesh() 
+	Mesh::Mesh() : Entity(RENDER3D)
 	{
 		mesh = 0;
 		materials = 0;
@@ -113,33 +113,37 @@ namespace Advanced2D {
 	
 
 //****updated in chapter 7
-	void Mesh::Draw()
-{
-if (material_count == 0) {
-mesh->DrawSubset(0);
-}
-else {
-//draw each mesh subset
-for( DWORD i=0; i < material_count; i++ )
-{
-// Set the material and texture for this subset
-g_engine->getDevice()->SetMaterial( &materials[i] );
-if (textures[i])
-{
-if (textures[i]->GetType() == D3DRTYPE_TEXTURE)
-{
-D3DSURFACE_DESC desc;
-textures[i]->GetLevelDesc(0, &desc);
-if (desc.Width > 0) {
-	g_engine->getDevice()->SetTexture( 0, textures[i] );
-}
-}
-}
-// Draw the mesh subset
-mesh->DrawSubset( i );
-}
-}
-}
+	void Mesh::draw()
+	{
+		Transform();
+
+		if (material_count == 0) {
+			mesh->DrawSubset(0);
+		}
+		else {
+			//draw each mesh subset
+			for( DWORD i=0; i < material_count; i++ )
+			{
+				// Set the material and texture for this subset
+				g_engine->getDevice()->SetMaterial( &materials[i] );
+	
+				if (textures[i]) 
+				{
+					if (textures[i]->GetType() == D3DRTYPE_TEXTURE) 
+					{
+						D3DSURFACE_DESC desc;
+						textures[i]->GetLevelDesc(0, &desc);
+						if (desc.Width > 0) {
+							g_engine->getDevice()->SetTexture( 0, textures[i] );
+						}
+					}
+				}
+				
+				// Draw the mesh subset
+				mesh->DrawSubset( i );
+			}
+		}
+	}
 	
 	void Mesh::Transform()
 	{
@@ -173,8 +177,8 @@ mesh->DrawSubset( i );
 	}
 	
 //*****modified in chapter 7 - update listing in chapter 2
-	void Mesh::Update()
-	//void Mesh::move()
+	//void Mesh::Update()
+	void Mesh::move()
 	{
 		position.x += velocity.x;
 	    position.y += velocity.y;

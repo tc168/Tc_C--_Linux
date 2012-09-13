@@ -54,6 +54,12 @@
     <ClInclude Include="..\Audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Timer.cpp">
@@ -90,6 +96,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Audio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
