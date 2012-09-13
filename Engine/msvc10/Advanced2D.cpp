@@ -30,13 +30,15 @@ namespace Advanced2D
         
         //window handle must be set later on for DirectX!
         this->setWindowHandle(0);
-    
     }
     
     Engine::~Engine()
     {
-       if (this->p_device) this->p_device->Release();
-       if (this->p_d3d) this->p_d3d->Release();
+        audio->StopAll();
+        delete audio;
+        delete p_input;
+        if (this->p_device) this->p_device->Release();
+        if (this->p_d3d) this->p_d3d->Release();
     }
     
     std::string Engine::getVersionText()
@@ -109,7 +111,15 @@ namespace Advanced2D
         //initialize 2D renderer
         HRESULT result = D3DXCreateSprite(this->p_device, &this->p_sprite_handler);
         if (result != D3D_OK) return 0;
-    
+
+		//create input handler
+        p_input = new Input(this->getWindowHandle());
+
+        //create audio system
+        audio = new Audio();
+        if (!audio->Init())    return 0;
+
+        
         
         //call game initialization extern function
         if (!game_init(this->getWindowHandle()))
@@ -117,9 +127,6 @@ namespace Advanced2D
     
         //set a default material
         SetDefaultMaterial();
-
-        //initialize DirectInput
-        p_input = new Input(this->getWindowHandle());
     
         return 1;
     }
@@ -131,7 +138,6 @@ namespace Advanced2D
         g_engine->getDevice()->SetTransform(D3DTS_WORLD, &matrixWorld);
     }
     
-//***** ADD AMBIENT CODE TO CHAPTER 1 LISTINGS
     void Engine::SetDefaultMaterial()
     {
         D3DMATERIAL9 mat;
@@ -191,6 +197,58 @@ namespace Advanced2D
         gameover = true;
     }
     
+    void Engine::Update()
+    {
+        static Timer timedUpdate;
+    
+        //calculate core framerate
+        p_frameCount_core++;
+        if (p_coreTimer.stopwatch(999)) {
+            p_frameRate_core = p_frameCount_core;
+            p_frameCount_core = 0;
+        }
+    
+        //fast update with no timing
+        game_update();
+    
+        //update with 60fps timing
+        if (!timedUpdate.stopwatch(14)) {
+            if (!this->getMaximizeProcessor()) 
+            {
+                Sleep(1);
+            }
+        }
+        else {
+            //calculate real framerate
+            p_frameCount_real++; 
+            if (p_realTimer.stopwatch(999)) {
+                p_frameRate_real = p_frameCount_real;
+                p_frameCount_real = 0;
+            }
+    
+            //update input devices
+            p_input->Update();
+            this->UpdateKeyboard();
+            this->UpdateMouse();
+
+            //update audio system
+            audio->Update();
+            
+            //begin rendering
+            this->RenderStart();
+
+            game_render3d();
+
+            Render2D_Start();
+            game_render2d();
+            Render2D_Stop();
+                    
+            //done rendering
+            this->RenderStop();
+        }
+    
+    }
+    
     void Engine::UpdateMouse()
     {
         static int oldPosX = 0;
@@ -198,8 +256,9 @@ namespace Advanced2D
         int deltax = p_input->GetDeltaX();
         int deltay = p_input->GetDeltaY();
     
-        //check mouse buttons 1-3
-        for (int n=0; n<4; n++) {
+        //check mouse buttons
+        for (int n=0; n<4; n++) 
+        {
             if (p_input->GetMouseButton(n))
                 game_mouseButton(n);
         }
@@ -226,8 +285,8 @@ namespace Advanced2D
     void Engine::UpdateKeyboard()
     {
         static char old_keys[256];
-        for (int n=0; n<255; n++) 
-        {
+    
+        for (int n=0; n<255; n++) {
             //check for key press
             if (p_input->GetKeyState(n) & 0x80) {
                 game_keyPress(n);
@@ -241,59 +300,6 @@ namespace Advanced2D
         }
     }
 
-    void Engine::Update()
-    {
-        static Timer timedUpdate;
-    
-        //calculate core framerate
-        p_frameCount_core++;
-        if (p_coreTimer.stopwatch(999)) {
-            p_frameRate_core = p_frameCount_core;
-            p_frameCount_core = 0;
-        }
-
-        //update input devices
-        p_input->Update();
-        this->UpdateKeyboard();
-        this->UpdateMouse();
-    
-        //fast update with no timing
-        game_update();
-    
-        //update with 60fps timing
-        if (!timedUpdate.stopwatch(14)) {
-            if (!this->getMaximizeProcessor()) 
-            {
-                Sleep(1);
-            }
-        }
-        else {
-            //calculate real framerate
-            p_frameCount_real++; 
-            if (p_realTimer.stopwatch(999)) {
-                p_frameRate_real = p_frameCount_real;
-                p_frameCount_real = 0;
-            }
-    
-            //begin rendering
-            this->RenderStart();
-
-            //let game do it's own 3D
-            this->SetIdentity();
-            game_render3d();
-
-            //2D rendering
-            Render2D_Start();
-            game_render2d();
-            Render2D_Stop();
-                    
-            //done rendering
-            this->RenderStop();
-        }
-    
-    }
-
-//****** CHANGE BACK IN CHAPTER 1 
     void Engine::Close()
     {
         try {

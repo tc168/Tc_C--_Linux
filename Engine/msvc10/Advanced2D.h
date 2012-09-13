@@ -12,9 +12,11 @@
 #include <string>
 #include <sstream>
 #include <ctime>
+#include <cmath>
 #include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
+//#include <dxerr9.h>
 #include <dinput.h>
 #include "winmain.h"
 #include "Timer.h"
@@ -26,6 +28,8 @@
 #include "Sprite.h"
 #include "ParticleEmitter.h"
 #include "Input.h"
+#include "fmod.hpp"
+#include "Audio.h"
 
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 0
@@ -40,6 +44,7 @@ extern void game_update();
 extern void game_end();
 extern void game_render3d();
 extern void game_render2d();
+
 extern void game_keyPress(int key);
 extern void game_keyRelease(int key);
 extern void game_mouseButton(int button);
@@ -75,9 +80,11 @@ namespace Advanced2D
 		Timer p_realTimer;
 		long p_frameCount_real;
 		long p_frameRate_real;
+
 		Input *p_input;
 		void UpdateKeyboard();
 		void UpdateMouse();
+
 
 	public:
 		Engine();
@@ -97,6 +104,9 @@ namespace Advanced2D
 		int Render2D_Start();
 		int Render2D_Stop();
 		int Release();
+
+		//simplified public Audio object
+		Audio *audio;
 
 		//accessor/mutator functions expose the private variables
 		bool isPaused() { return this->p_pauseMode; }

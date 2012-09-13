@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Advanced2D.h" />
+    <ClInclude Include="..\Audio.h" />
     <ClInclude Include="..\Camera.h" />
     <ClInclude Include="..\Input.h" />
     <ClInclude Include="..\Light.h" />
@@ -114,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Advanced2D.cpp" />
+    <ClCompile Include="..\Audio.cpp" />
     <ClCompile Include="..\Camera.cpp" />
     <ClCompile Include="..\Input.cpp" />
     <ClCompile Include="..\Light.cpp" />
