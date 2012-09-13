@@ -1,3 +1,4 @@
+//*****MAKE SURE THIS IS IN SYNC WITH CHAPTER 1
 #include "Advanced2D.h"
 
 //macro to read the key states
@@ -136,6 +137,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 		return 0;
 	}
 
+	try {
 	// main message loop
 	gameover = false;
 	while (!gameover)
@@ -147,12 +149,21 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 		}
 		g_engine->Update();
 	}
+	} 
+	catch(...) {
+		MessageBoxA(g_hWnd, "ERROR","EXCEPTION",0);
+	}
 
    if (g_engine->getFullscreen()) {
 	  ShowCursor(TRUE);
    }
 
+//*****CHANGE IN CHAPTER 1 LISTING
+	//g_engine->Close();
+
+//*****CHAPTER 11 -- BUG!!!!! game_end is not being called up to this point!
 	game_end();
+    pthread_mutex_destroy(&g_engine->mutex);
 
 	delete g_engine;
 

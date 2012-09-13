@@ -2,6 +2,9 @@
 
 #pragma once
 
+
+//***mod--floats to doubles
+
 namespace Advanced2D {
 
 	class Rect {

@@ -58,7 +58,7 @@ namespace Advanced2D {
 	
 	bool Input::GetMouseButton( char button )
 	{
-		return (bool)(mouseState.rgbButtons[button] & 0x80);
+		return (bool)( mouseState.rgbButtons[button] & 0x80 );
 	}
 	
 };

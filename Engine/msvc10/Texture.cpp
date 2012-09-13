@@ -1,7 +1,5 @@
 #include "Advanced2D.h"
 
-namespace Advanced2D {
-
 
 Texture::Texture()
 {
@@ -32,7 +30,7 @@ bool Texture::Load(std::string filename, D3DCOLOR transcolor)
     result = D3DXGetImageInfoFromFile(filename.c_str(), &info);
     if (result != D3D_OK) 	{
         texture = NULL;
-		return false;
+		return 1;
 	}
 
     //create the new texture by loading a bitmap image file
@@ -55,10 +53,10 @@ bool Texture::Load(std::string filename, D3DCOLOR transcolor)
     //make sure the bitmap textre was loaded correctly
     if (result != D3D_OK) 	{
         texture = NULL;
-		return false;
+		return 0;
 	}
 
-	return true;
+	return 1;
 }
 
 void Texture::Release()
@@ -68,4 +66,37 @@ void Texture::Release()
 }
 
 
+/*
+// D3DX support function used to fill texture with a solid color
+VOID WINAPI ColorFill (D3DXVECTOR4* pOut, const D3DXVECTOR2* pTexCoord, 
+	const D3DXVECTOR2* pTexelSize, LPVOID pData)
+{
+    *pOut = D3DXVECTOR4(pTexCoord->x, pTexCoord->y, 0.0f, 0.0f);
 }
+	if (FAILED(r = D3DXFillTexture(texture, ColorFill, NULL))) {
+		texture = NULL;
+		return false;
+	}
+*/
+/*
+bool Texture::create(int width,int height)
+{
+	HRESULT r;
+
+	r = D3DXCreateTexture(g_engine->getDevice(), width, height, 1, 0, 
+		D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &texture );
+
+	if (r != D3D_OK) {
+		texture = NULL;
+		return false;
+	}
+
+	LPDIRECT3DSURFACE9 surface;
+	texture->GetSurfaceLevel(0, &surface);
+	g_engine->getDevice()->ColorFill( surface, NULL, 0xFFFFFFFF );
+	surface->Release();
+
+	return true;
+}
+*/
+

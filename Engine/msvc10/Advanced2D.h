@@ -2,9 +2,15 @@
 // Main header file
 
 #pragma once
+//#ifndef _ADVANCED2D_H
+//#define _ADVANCED2D_H 1
 
+//*****ADD TO CHAPTER 1 LISTING
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
+
+//****CHAPTER 7 NOTE: winmain.h was removed
+//#include "winmain.h"
 
 #include <iostream>
 #include <list>
@@ -41,6 +47,7 @@
 #include "Console.h"
 #include "Rect.h"
 #include "Math.h"
+#include <pthread.h>
 
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 0
@@ -49,6 +56,7 @@
 //external variables and functions
 extern bool gameover;
 
+//*****CHANGE INT TO BOOL IN CHAPTER 1 LISTING
 extern bool game_preload();
 extern bool game_init(HWND);
 extern void game_update();
@@ -56,6 +64,7 @@ extern void game_end();
 extern void game_render3d();
 extern void game_render2d();
 
+//****CHAPTER 5
 extern void game_keyPress(int);
 extern void game_keyRelease(int);
 extern void game_mouseButton(int);
@@ -63,17 +72,27 @@ extern void game_mouseMotion(int,int);
 extern void game_mouseMove(int,int);
 extern void game_mouseWheel(int);
 
+//****CHAPTER 7
 extern void game_entityUpdate(Advanced2D::Entity*);
 extern void game_entityRender(Advanced2D::Entity*);
 
+//add this one in chapter 9
 extern void game_entityCollision(Advanced2D::Entity*,Advanced2D::Entity*);
 
+
+//*****ADD TO CHAPTER 1
 //macro to read the keyboard asynchronously
 #define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000)?1:0)
 
 
 namespace Advanced2D 
 {
+//****CHAPTER 11
+	//thread stuff
+	//pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+	void* thread_function_bury_entities(void* data);
+	
+
 	class Engine {
 	private:
 		int p_versionMajor, p_versionMinor, p_revision;
@@ -96,24 +115,32 @@ namespace Advanced2D
 		Timer p_realTimer;
 		long p_frameCount_real;
 		long p_frameRate_real;
+//****MOVED HERE FROM CPP FILE IN CHAPTER 9
 		Timer timedUpdate;
+//*****ADDED IN CHAPTER 9
 		Timer collisionTimer;
 
+
+//****ADDED IN CHAPTER 5
 		Input *p_input;
 		void UpdateKeyboard();
 		void UpdateMouse();
 
+
+//*****ADDED IN CHAPTER 7
 		void UpdateEntities();
 		void Draw2DEntities();
 		void Draw3DEntities();
 		void BuryEntities();
 
+//****ADDED IN CHAPTER 9
 		bool collision(Sprite *sprite1, Sprite *sprite2);
 		bool collisionBR(Sprite *sprite1, Sprite *sprite2);
 		bool collisionD(Sprite *sprite1, Sprite *sprite2);
 		void TestForCollisions();
 
-		std::list<Entity*> p_entities;
+		std::list<Entity*>* p_entities;
+
 
 	public:
 		Engine();
@@ -136,6 +163,10 @@ namespace Advanced2D
 
 		//public Audio object
 		Audio *audio;
+
+//CHAPTER 10
+		//public Math object
+		Math *math;		
 
 
 		//accessor/mutator functions expose the private variables
@@ -176,14 +207,22 @@ namespace Advanced2D
 		bool getMaximizeProcessor() { return this->p_maximizeProcessor; }
 		void setMaximizeProcessor(bool value) { this->p_maximizeProcessor = value; }
 
-		std::list<Entity*> getEntityList() { return p_entities; }
-		long getEntityCount() { return (long)p_entities.size(); }
+
+//******NEED TO ADD
+//**CHAPTER 11 -- the entity list is now created on heap! update this in ch7
+		std::list<Entity*>* getEntityList() { return p_entities; }
+		long getEntityCount() { return (long)p_entities->size(); }
 		void addEntity(Entity *entity);
 		Entity *findEntity(std::string name);
 		Entity *findEntity(int objectType);
+//****ADDED IN CHAPTER 10
 		int getEntityCount(int objectType);
+
+		//exposed to public to simplify code
+		pthread_mutex_t mutex;
 		
 	}; //class
+
 
 }; //namespace
 

@@ -1,8 +1,5 @@
 #include "Advanced2D.h"
 
-namespace Advanced2D {
-
-
 Timer::Timer(void)
 {
 	timer_start = timeGetTime();
@@ -44,4 +41,3 @@ bool Timer::stopwatch(int ms)
 	else return false;
 }
 
-}

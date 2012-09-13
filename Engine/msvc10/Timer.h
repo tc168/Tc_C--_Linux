@@ -3,9 +3,6 @@
 #ifndef _TIMER_H
 #define _TIMER_H 1
 
-namespace Advanced2D {
-
-
 class Timer
 {
 private:
@@ -21,8 +18,6 @@ public:
 	void sleep(int ms);
 	void reset();
 	bool stopwatch(int ms);
-};
-
 };
 
 #endif

@@ -2,6 +2,8 @@
 #ifndef _WINMAIN_H
 #define _WINMAIN_H 1
 
+//*****UPDATE IN CHAPTER 1
+
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>

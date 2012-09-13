@@ -1,5 +1,6 @@
 #include "Advanced2D.h"
 
+//***mod--change all to double
 namespace Advanced2D {
 
 	Vector3::Vector3()
