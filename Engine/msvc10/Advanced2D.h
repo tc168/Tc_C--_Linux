@@ -38,6 +38,9 @@
 #include "Audio.h"
 #include "Entity.h"
 #include "Font.h"
+#include "Console.h"
+#include "Rect.h"
+#include "Math.h"
 
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 0
@@ -62,6 +65,8 @@ extern void game_mouseWheel(int);
 
 extern void game_entityUpdate(Advanced2D::Entity*);
 extern void game_entityRender(Advanced2D::Entity*);
+
+extern void game_entityCollision(Advanced2D::Entity*,Advanced2D::Entity*);
 
 //macro to read the keyboard asynchronously
 #define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000)?1:0)
@@ -91,16 +96,22 @@ namespace Advanced2D
 		Timer p_realTimer;
 		long p_frameCount_real;
 		long p_frameRate_real;
+		Timer timedUpdate;
+		Timer collisionTimer;
 
 		Input *p_input;
 		void UpdateKeyboard();
 		void UpdateMouse();
 
-		void TestForCollisions();
 		void UpdateEntities();
 		void Draw2DEntities();
 		void Draw3DEntities();
 		void BuryEntities();
+
+		bool collision(Sprite *sprite1, Sprite *sprite2);
+		bool collisionBR(Sprite *sprite1, Sprite *sprite2);
+		bool collisionD(Sprite *sprite1, Sprite *sprite2);
+		void TestForCollisions();
 
 		std::list<Entity*> p_entities;
 
@@ -123,8 +134,9 @@ namespace Advanced2D
 		int Render2D_Stop();
 		int Release();
 
-		//simplified public Audio object
+		//public Audio object
 		Audio *audio;
+
 
 		//accessor/mutator functions expose the private variables
 		bool isPaused() { return this->p_pauseMode; }
@@ -164,20 +176,20 @@ namespace Advanced2D
 		bool getMaximizeProcessor() { return this->p_maximizeProcessor; }
 		void setMaximizeProcessor(bool value) { this->p_maximizeProcessor = value; }
 
-
 		std::list<Entity*> getEntityList() { return p_entities; }
 		long getEntityCount() { return (long)p_entities.size(); }
 		void addEntity(Entity *entity);
 		Entity *findEntity(std::string name);
 		Entity *findEntity(int objectType);
-
+		int getEntityCount(int objectType);
 		
 	}; //class
-
 
 }; //namespace
 
  
 //define the global engine object (visible everywhere!)
 extern Advanced2D::Engine *g_engine;
+
+//#endif
 

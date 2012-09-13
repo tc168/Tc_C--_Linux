@@ -1,6 +1,7 @@
 #include "Advanced2D.h"
 
-#pragma once
+#ifndef _VECTOR3_H
+#define _VECTOR3_H 1
 
 namespace Advanced2D {
 
@@ -37,4 +38,4 @@ namespace Advanced2D {
 	}; //class
 };
 
-
+#endif

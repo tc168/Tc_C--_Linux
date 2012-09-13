@@ -1,6 +1,4 @@
 #include "Advanced2D.h"
-#include <cmath>
-#include "Vector3.h"
 
 namespace Advanced2D {
 

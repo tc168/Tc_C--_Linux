@@ -59,6 +59,7 @@ namespace Advanced2D {
 		int getHeight() { return this->height; }
 		void setHeight(int value) { this->height = value; }
 
+		//accessors/mutators
 		int getState() { return state; }
 		void setState(int value) { state = value; }
 
@@ -99,6 +100,7 @@ namespace Advanced2D {
 		virtual ~Sprite();
 		bool loadImage(std::string filename, D3DCOLOR transcolor = D3DCOLOR_XRGB(255,0,255));
 		void setImage(Texture *);
+
 		void move();
 		void animate();
 		void draw();
