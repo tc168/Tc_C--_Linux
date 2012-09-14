@@ -3,6 +3,9 @@
 
 #pragma once
 
+
+//***mod--floats to doubles
+
 namespace Advanced2D {
 
 	class Mesh : public Entity
@@ -39,50 +42,62 @@ namespace Advanced2D {
 	
 		bool Load(char *filename);
 	
-		void CreateSphere(float radius = 0.1f, int slices = 10, int stacks = 10);
-		void CreateCube(float width = 1.0f, float height = 1.0f, float depth = 1.0f);
+		void CreateSphere(double radius = 0.1f, int slices = 10, int stacks = 10);
+		void CreateCube(double width = 1.0f, double height = 1.0f, double depth = 1.0f);
 	
 		void Draw();
 		void Transform();
 		
 		void Rotate(D3DXVECTOR3 rot);
-		void Rotate(float x,float y,float z);
+		void Rotate(double x,double y,double z);
 	
 		void Update();
-		void LimitBoundary(float left,float right,float top,float bottom,float back,float front);
+		void LimitBoundary(double left,double right,double top,double bottom,double back,double front);
 	
 		void SetPosition(D3DXVECTOR3 pos) { position = pos; }
-		void SetPosition(float x,float y,float z) { position = D3DXVECTOR3(x,y,z); }
+		void SetPosition(double x,double y,double z) 
+		{ 
+			position = D3DXVECTOR3((float)x,(float)y,(float)z); 
+		}
 		D3DXVECTOR3 GetPosition() { return position; }
 	
 		void SetVelocity(D3DXVECTOR3 vel) { velocity = vel; }
-		void SetVelocity(float x,float y,float z) { velocity = D3DXVECTOR3(x,y,z); }
+		void SetVelocity(double x,double y,double z) 
+		{ 
+			velocity = D3DXVECTOR3((float)x,(float)y,(float)z); 
+		}
 		D3DXVECTOR3 GetVelocity() { return velocity; }
 	
 		void SetRotation(D3DXVECTOR3 rot) { rotation = rot; }
-		void SetRotation(float x,float y,float z) { rotation = D3DXVECTOR3(x,y,z); }
+		void SetRotation(double x,double y,double z) 
+		{ 
+			rotation = D3DXVECTOR3((float)x,(float)y,(float)z); 
+		}
 	
-		void SetRotationX(float x) { rotation.x = x; }
-		float GetRotationX() { return rotation.x; }
+		void SetRotationX(double x) { rotation.x = (float)x; }
+		double GetRotationX() { return rotation.x; }
 	
-		void SetRotationY(float y) { rotation.y = y; }
-		float GetRotationY() { return rotation.y; }
+		void SetRotationY(double y) { rotation.y = (float)y; }
+		double GetRotationY() { return rotation.y; }
 	
-		void SetRotationZ(float z) { rotation.z = z; }
-		float GetRotationZ() { return rotation.z; }
+		void SetRotationZ(double z) { rotation.z = (float)z; }
+		double GetRotationZ() { return rotation.z; }
 	
 		void SetScale(D3DXVECTOR3 value) { scale = value; }
-		void SetScale(float x,float y,float z) { scale = D3DXVECTOR3(x,y,z); }
+		void SetScale(double x,double y,double z) 
+		{ 
+			scale = D3DXVECTOR3((float)x,(float)y,(float)z); 
+		}
 		D3DXVECTOR3 GetScale() { return scale; }
 	
-		void SetScaleX(float x) { scale.x = x; }
-		float GetScaleX() { return scale.x; }
+		void SetScaleX(double x) { scale.x = (float)x; }
+		double GetScaleX() { return scale.x; }
 	
-		void SetScaleY(float y) { scale.y = y; }
-		float GetScaleY() { return scale.y; }
+		void SetScaleY(double y) { scale.y = (float)y; }
+		double GetScaleY() { return scale.y; }
 	
-		void SetScaleZ(float z) { scale.z = z; }
-		float GetScaleZ() { return scale.z; }
+		void SetScaleZ(double z) { scale.z = (float)z; }
+		double GetScaleZ() { return scale.z; }
 		
 	};
 

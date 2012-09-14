@@ -37,7 +37,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 	RECT windowRect;
 
 	/**
-	 * Create engine object first!
+	 * Create engine object first! 
 	**/
 	g_engine = new Advanced2D::Engine();
 	
@@ -108,6 +108,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 	AdjustWindowRectEx(&windowRect, dwStyle, FALSE, dwExStyle);
 
 	//create the program window
+//***modifications
 	g_hWnd = CreateWindowEx( 0,
 	   title,								 //window class
 	   title,								 //title bar
@@ -137,7 +138,6 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 		return 0;
 	}
 
-	try {
 	// main message loop
 	gameover = false;
 	while (!gameover)
@@ -149,10 +149,6 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 		}
 		g_engine->Update();
 	}
-	} 
-	catch(...) {
-		MessageBoxA(g_hWnd, "ERROR","EXCEPTION",0);
-	}
 
    if (g_engine->getFullscreen()) {
 	  ShowCursor(TRUE);
@@ -163,7 +159,6 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 
 //*****CHAPTER 11 -- BUG!!!!! game_end is not being called up to this point!
 	game_end();
-    pthread_mutex_destroy(&g_engine->mutex);
 
 	delete g_engine;
 

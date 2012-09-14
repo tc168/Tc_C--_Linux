@@ -62,8 +62,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>../lib/Advanced2D.lib;d3d9.lib;d3d10.lib;d3dx9.lib;dxguid.lib;dinput8.lib;winmm.lib;fmodex_vc.lib;user32.lib;gdi32.lib;pthreadVC.lib;pthreadVCE.lib;pthreadVSE.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\pthread\MSVC\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>../lib/Advanced2D.lib;d3d9.lib;d3d10.lib;d3dx9.lib;dxguid.lib;dinput8.lib;winmm.lib;fmodex_vc.lib;user32.lib;gdi32.lib;pthreadVC.lib;pthreadVCE.lib;pthreadVSE.lib;lua5.1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;C:\pthread\MSVC\lib;C:\Tc_C++_Linux\trunk\Engine\msvc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

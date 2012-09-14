@@ -1,8 +1,9 @@
+#pragma once
+
 #include "Advanced2d.h"
 
-#ifndef _LIGHT_H
-#define _LIGHT_H 1
-
+namespace Advanced2D {
+    
 class Light
 {
 private:
@@ -11,17 +12,17 @@ private:
 	int p_lightNum;
 
 public:
-	Light(int lightNum, D3DLIGHTTYPE type, D3DXVECTOR3 position, D3DXVECTOR3 direction, float range);
+	Light(int lightNum, D3DLIGHTTYPE type, D3DXVECTOR3 position, D3DXVECTOR3 direction, double range);
 	~Light(void);
 
-	void setX(float value) { p_light.Position.x = value; }
-	float getX() { return p_light.Position.x; }
+	void setX(double value) { p_light.Position.x = (float)value; }
+	double getX() { return p_light.Position.x; }
 
-	void setY(float value) { p_light.Position.y = value; }
-	float getY() { return p_light.Position.y; }
+	void setY(double value) { p_light.Position.y = (float)value; }
+	double getY() { return p_light.Position.y; }
 
-	void setZ(float value) { p_light.Position.z = value; }
-	float getZ() { return p_light.Position.z; }
+	void setZ(double value) { p_light.Position.z = (float)value; }
+	double getZ() { return p_light.Position.z; }
 
 	D3DLIGHTTYPE getType() { return p_type; }
 
@@ -29,11 +30,17 @@ public:
 	D3DCOLORVALUE getColor() { return p_light.Diffuse; }
 
 	void setDirection(D3DXVECTOR3 direction) { this->p_light.Direction = direction; }
-	void setDirection(float x,float y,float z) { setDirection(D3DXVECTOR3(x,y,z)); }
+	void setDirection(double x,double y,double z) 
+	{ 
+		setDirection(D3DXVECTOR3((float)x,(float)y,(float)z)); 
+	}
 	D3DXVECTOR3 getDirection() { return this->p_light.Direction; }
 
 	void setPosition(D3DXVECTOR3 pos) { p_light.Position = pos; }
-	void setPosition(float x,float y,float z) { setPosition(D3DXVECTOR3(x,y,z)); }
+	void setPosition(double x,double y,double z) 
+	{ 
+		setPosition(D3DXVECTOR3((float)x,(float)y,(float)z)); 
+	}
 	D3DXVECTOR3 getPosition() { return p_light.Position; }
 
 
@@ -42,5 +49,5 @@ public:
 	void Hide();
 
 };
+}; //namespace
 
-#endif

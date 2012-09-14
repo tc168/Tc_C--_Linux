@@ -147,7 +147,9 @@ namespace Advanced2D {
 	{
 		FMOD_RESULT res;
 		Sample *sample = FindSample(name);
-	
+//***BUG
+		if (!sample) return false;
+		
 		if (sample->sample != NULL) {
 			try {
 				//sample found, play it

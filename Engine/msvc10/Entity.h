@@ -45,7 +45,7 @@ namespace Advanced2D {
 		void setAlive(bool value) { alive = value; }
 
 		int getLifetime() { return lifetimeLength; }
-		void setLifetime(int milliseconds) { lifetimeLength = milliseconds; lifetimeTimer.reset(); }
+		void setLifetime(int ms) { lifetimeLength = ms; lifetimeTimer.reset(); }
 		bool lifetimeExpired() { return lifetimeTimer.stopwatch(lifetimeLength); }
 
 		int getObjectType() { return objectType; }

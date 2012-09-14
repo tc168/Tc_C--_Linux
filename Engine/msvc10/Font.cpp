@@ -1,6 +1,8 @@
 
 #include "Advanced2D.h"
 
+//***mod--changed all floats to double
+
 namespace Advanced2D {
 
 	Font::Font() : Sprite()
@@ -11,8 +13,8 @@ namespace Advanced2D {
 	
 	void Font::Print(int x, int y, std::string text, int color)
 	{ 
-		float fx = (float)x;
-		float fy = (float)y;
+		double fx = x;
+		double fy = y;
 
 		//set font color
 		this->setColor( color );

@@ -1,13 +1,11 @@
 #include "Advanced2D.h"
 
-#ifndef _VECTOR3_H
-#define _VECTOR3_H 1
+#pragma once
 
 namespace Advanced2D {
 
 	class Vector3 {
 	private:
-//***mod--changed all to double
 		double x, y, z;
 	
 	public:
@@ -24,7 +22,6 @@ namespace Advanced2D {
 		double getZ() { return z; }
 		void setZ(double v) { z = v; }
 		void Move( double mx,double my,double mz);
-//***bug
 		void operator+=(const Vector3& v);
 		void operator-=(const Vector3& v);
 		void operator*=(const Vector3& v);
@@ -40,4 +37,4 @@ namespace Advanced2D {
 	}; //class
 };
 
-#endif
+

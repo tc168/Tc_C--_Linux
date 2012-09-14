@@ -69,6 +69,24 @@
     <ClInclude Include="..\Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\lua.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\luaconf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lualib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lauxlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Script.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Timer.cpp">
@@ -120,6 +138,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Math.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Script.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

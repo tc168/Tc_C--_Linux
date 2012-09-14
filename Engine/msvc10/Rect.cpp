@@ -1,9 +1,11 @@
 #include "Advanced2D.h"
 
-
-//***mod--floats to doubles
-
 namespace Advanced2D {
+
+    Rect::Rect()
+    {
+        left = top = right = bottom = 0;
+    }
 
 	Rect::Rect(int left,int top,int right,int bottom)
 	{

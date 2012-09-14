@@ -9,7 +9,7 @@ namespace Advanced2D
 	Engine::Engine()
 	{
 		srand((unsigned int)time(NULL));
-		p_maximizeProcessor = false;
+		p_maximizeProcessor = true;
 		p_frameCount_core = 0;
 		p_frameRate_core = 0;
 		p_frameCount_real = 0;
@@ -34,17 +34,6 @@ namespace Advanced2D
 	
 	Engine::~Engine()
 	{
-		//delete managed entities
-		std::list<Entity*>::iterator iter = p_entities->begin();
-		while (iter != p_entities->end())
-		{
-			delete (*iter);
-			iter = p_entities->erase( iter );
-			iter++;
-		}
-		p_entities->clear();
-		delete p_entities;
-
 		audio->StopAll();
 		delete audio;
 		delete p_input;
@@ -117,7 +106,6 @@ namespace Advanced2D
 	    //use ambient lighting and z-buffering
 		this->p_device->SetRenderState(D3DRS_ZENABLE, TRUE);
 		this->p_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-
         this->p_device->SetRenderState(D3DRS_LIGHTING, true);
 		this->SetAmbient(this->p_ambientColor);
 	
@@ -125,16 +113,14 @@ namespace Advanced2D
 		HRESULT result = D3DXCreateSprite(this->p_device, &this->p_sprite_handler);
 		if (result != D3D_OK) return 0;
 
-//this must be re-factored in all previous chapters
-	p_entities = new std::list<Entity*>();
-
-	
+        //initialize directinput	
 		p_input = new Input(this->getWindowHandle());
 
 		//create audio system
 		audio = new Audio();
 		if (!audio->Init())	return 0;
 
+        //initialize math library
 		math = new Math();
 
 		//call game initialization extern function
@@ -143,12 +129,6 @@ namespace Advanced2D
 	
 		//set a default material
 		SetDefaultMaterial();
-
-//CHAPTER 11 - convert BuryEntities into a thread function
-		mutex = PTHREAD_MUTEX_INITIALIZER;
-		pthread_t thread_bury_entities;
-		int threadid = 1;
-		int id = pthread_create(&thread_bury_entities, NULL, thread_function_bury_entities, (void*)&threadid);
 	
 		return 1;
 	}
@@ -229,23 +209,16 @@ namespace Advanced2D
 		}
 	
 		//fast update with no timing
-	    pthread_mutex_lock(&mutex);
 		game_update();
-	    pthread_mutex_unlock(&mutex);
 
 		//update entities
-	    pthread_mutex_lock(&mutex);
 		if (!p_pauseMode) UpdateEntities();
-	    pthread_mutex_unlock(&mutex);
 
 		//perform global collision testing at 20 Hz
 		if (!p_pauseMode && collisionTimer.stopwatch(50)) 
 		{
-		    pthread_mutex_lock(&mutex);
 			TestForCollisions();
-		    pthread_mutex_unlock(&mutex);
 		}
-
 
 		//update with 60fps timing
 		if (!timedUpdate.stopwatch(14)) {
@@ -266,7 +239,6 @@ namespace Advanced2D
 			p_input->Update();
 			this->UpdateKeyboard();
 			this->UpdateMouse();
-			if (gameover) return;
 
 			//update audio system
 			audio->Update();
@@ -274,33 +246,30 @@ namespace Advanced2D
 			//begin rendering
 			this->RenderStart();
  
-		    //pthread_mutex_lock(&mutex);
+            //call game 3d rendering
             game_render3d();
-		    //pthread_mutex_unlock(&mutex);
 
 			//render 3D entities 
-		    pthread_mutex_lock(&mutex);
 			if (!p_pauseMode) Draw3DEntities();
-		    pthread_mutex_unlock(&mutex);
 
+            //begin 2d rendering
 			Render2D_Start();
 
 			//render 2D entities 
-		    pthread_mutex_lock(&mutex);
 			if (!p_pauseMode) Draw2DEntities();
-		    pthread_mutex_unlock(&mutex);
 
-		    pthread_mutex_lock(&mutex);
+            //let game do 2d rendering
 			game_render2d();
-		    pthread_mutex_unlock(&mutex);
 
-
+            //done with 2d rendering
 			Render2D_Stop();
         			
 			//done rendering
 			this->RenderStop();
 		}
 
+		//remove dead entities from the list	
+		BuryEntities();
 	}
 	
 	void Engine::UpdateMouse()
@@ -362,15 +331,15 @@ namespace Advanced2D
 			catch (...) { }
 		}
 		
+
 		void Engine::UpdateEntities()
 		{
 			std::list<Entity*>::iterator iter;
 			Entity *entity;
 		
-			iter = p_entities->begin();
-			while (iter != p_entities->end())
+			iter = p_entities.begin();
+			while (iter != p_entities.end())
 			{
-
 				//point local sprite to object in the list
 				entity = *iter;
 				
@@ -394,10 +363,6 @@ namespace Advanced2D
 					}
 				}
 				++iter;
-
-				if (gameover) break;
-
-
 			} 
 		}
 		
@@ -406,8 +371,8 @@ namespace Advanced2D
 			std::list<Entity*>::iterator iter;
 			Entity *entity;
 			
-			iter = p_entities->begin();
-			while (iter != p_entities->end())
+			iter = p_entities.begin();
+			while (iter != p_entities.end())
 			{
 				//temporary pointer
 				entity = *iter;
@@ -418,24 +383,22 @@ namespace Advanced2D
 					//is this entity in use?
 					if ( entity->getAlive() && entity->getVisible() ) {
 						entity->draw();
-
 						game_entityRender( entity );
-
 					}
 				}
 
 				++iter;
-				if (gameover) break;
-
 			} 
 		}
 
+        /*  Modified from original.
+            Now, when invisible, game_entityRender is still called.
+        */
 		void Engine::Draw2DEntities()
 		{
 			Entity *entity;
-
-			std::list<Entity*>::iterator iter = p_entities->begin();
-			while (iter != p_entities->end())
+			std::list<Entity*>::iterator iter = p_entities.begin();
+			while (iter != p_entities.end())
 			{
 				//temporary pointer
 				entity = *iter;
@@ -444,21 +407,20 @@ namespace Advanced2D
 				if ( entity->getRenderType() == RENDER2D ) {
 
 					//is this entity in use?
-					if ( entity->getAlive() && entity->getVisible() ) {
-						entity->draw();
+					if ( entity->getAlive() ) {
+    
+                        if ( entity->getVisible() ) 
+    						entity->draw();
 
-						game_entityRender( entity );
+                        game_entityRender( entity );
 					}
 				}
+
 				++iter;
-				if (gameover) break;
-
 			} 
-
 		}
 
-//****CHAPTER 11 -- moved to thread_function_bury_entities
-		/*void Engine::BuryEntities()
+		void Engine::BuryEntities()
 		{
 			std::list<Entity*>::iterator iter = p_entities.begin();
 			while (iter != p_entities.end())
@@ -470,20 +432,17 @@ namespace Advanced2D
 				}
 				else iter++;
 			}
-		}*/
+		}
 			
 		Entity *Engine::findEntity(std::string name)
 		{
-
-			std::list<Entity*>::iterator i = p_entities->begin();
-			while (i != p_entities->end())
+			std::list<Entity*>::iterator i = p_entities.begin();
+			while (i != p_entities.end())
 			{
 				if ( (*i)->getAlive() == true && (*i)->getName() == name ) 
 					return *i;
 				else
 					++i;
-
-				if (gameover) break;
 			}
 			
 			return NULL;
@@ -491,15 +450,13 @@ namespace Advanced2D
 		
 		Entity *Engine::findEntity(int objectType)
 		{
-			std::list<Entity*>::iterator i = p_entities->begin();
-			while (i != p_entities->end())
+			std::list<Entity*>::iterator i = p_entities.begin();
+			while (i != p_entities.end())
 			{
 				if ( (*i)->getAlive() == true && (*i)->getObjectType() == objectType ) 
 					return *i;
 				else
 					++i;
-
-				if (gameover) break;
 			}
 			return NULL;
 		}
@@ -507,22 +464,14 @@ namespace Advanced2D
 		int Engine::getEntityCount(int objectType)
 		{
 			int total = 0;
-
-			std::list<Entity*>::iterator i = p_entities->begin();
-			if (*i) {
-
-				while (i != p_entities->end())
-				{
-					if ( (*i)->getAlive() && (*i)->getObjectType() == objectType ) 
-						total++;
-					else
-						++i;
-	
-					if (gameover) break;
-				}
-
+			std::list<Entity*>::iterator i = p_entities.begin();
+			while (i != p_entities.end())
+			{
+				if ( (*i)->getAlive() == true && (*i)->getObjectType() == objectType ) 
+					total++;
+				else
+					++i;
 			}
-
 			return total;
 		}
 
@@ -530,8 +479,9 @@ namespace Advanced2D
 		{
 			static int id = 0;
 			
-			entity->setID(id++);
-			p_entities->push_back(entity);
+			entity->setID(id);
+			p_entities.push_back(entity);
+			id++;
 		}
 
 		bool Engine::collision(Sprite *sprite1, Sprite *sprite2)
@@ -549,6 +499,7 @@ namespace Advanced2D
 			}
 		}
 
+        //Modified from original
 		bool Engine::collisionBR(Sprite *sprite1, Sprite *sprite2) 
 		{
 			bool ret = false;
@@ -558,7 +509,6 @@ namespace Advanced2D
 				sprite1->getY(),
 				sprite1->getX() + sprite1->getWidth() * sprite1->getScale(), 
 				sprite1->getY() + sprite1->getHeight() * sprite1->getScale() );
-			
 			Rect *rb = new Rect(
 				sprite2->getX(), 
 				sprite2->getY(),
@@ -570,10 +520,23 @@ namespace Advanced2D
 				ra->isInside( rb->getRight(), rb->getTop() ) ||
 				ra->isInside( rb->getLeft(), rb->getBottom() ) ||
 				ra->isInside( rb->getRight(), rb->getBottom() )) 
-					ret = true;
+                    ret = true;
 
-			delete ra;
-			delete rb;		
+/*
+            Rect ra = sprite1->getBounds();
+            Rect rb = sprite2->getBounds();
+
+            Vector3 upperLeft( rb.left, rb.top, 0.0 );
+            Vector3 lowerLeft( rb.left, rb.bottom, 0.0 );
+            Vector3 upperRight( rb.right, rb.top, 0.0 );
+            Vector3 lowerRight( rb.right, rb.bottom, 0.0 );
+
+        	if (ra.isInside( upperLeft ) || ra.isInside( lowerLeft ) ||
+				ra.isInside( upperRight ) || ra.isInside( lowerRight ))
+                    ret = true;
+*/
+            delete ra;
+            delete rb;
 			return ret;
 		}
 
@@ -610,7 +573,10 @@ namespace Advanced2D
 			return (dist < radius1 + radius2);
 		}
 
-
+        /*
+            Modified from original.
+            Now invisible sprites may still collide.
+        */
 		void Engine::TestForCollisions()
 		{
 			std::list<Entity*>::iterator first;
@@ -618,10 +584,9 @@ namespace Advanced2D
 			Sprite *sprite1;
 			Sprite *sprite2;
 		
-			first = p_entities->begin();
-			while (first != p_entities->end() )
+			first = p_entities.begin();
+			while (first != p_entities.end() )
 			{
-
 				//we only care about sprite collisions
 				if ( (*first)->getRenderType() == RENDER2D )
 				{
@@ -629,17 +594,19 @@ namespace Advanced2D
 					sprite1 = (Sprite*) *first;
 					
 					//if this entity is alive and visible...
-					if ( sprite1->getAlive() && sprite1->getVisible() && sprite1->isCollidable() )
+					//if ( sprite1->getAlive() && sprite1->getVisible() && sprite1->isCollidable() )
+                    if ( sprite1->getAlive() && sprite1->isCollidable() )
 					{
 						//test all other entities for collision
-						second = p_entities->begin();
-						while (second != p_entities->end() )
+						second = p_entities.begin();
+						while (second != p_entities.end() )
 						{
 							//point local sprite to sprite contained in the list
 							sprite2 = (Sprite*) *second;
 							
 							//if other entity is active and not same as first entity...
-							if ( sprite2->getAlive() && sprite2->getVisible() && sprite2->isCollidable() && sprite1 != sprite2 ) 
+							//if ( sprite2->getAlive() && sprite2->getVisible() && sprite2->isCollidable() && sprite1 != sprite2 ) 
+                            if ( sprite2->getAlive() && sprite2->isCollidable() && sprite1 != sprite2 ) 
 							{
 								//test for collision
 								if ( collision(sprite1, sprite2 ) ) {
@@ -657,52 +624,8 @@ namespace Advanced2D
 					//go to the next sprite in the list
 					first++;
 				}//render2d
-
-				if (gameover) break;
-
 			} //while
 		} 
 
 
-	void* thread_function_bury_entities(void* data)
-	{
-		static Timer timer;
-		std::list<Entity*>::iterator iter;
-
-	    while(!gameover)
-	    {
-			if (timer.stopwatch(2000))
-			{
-		        pthread_mutex_lock(&g_engine->mutex);
-
-				//iterate through entity list
-				iter = g_engine->getEntityList()->begin();
-				while (iter != g_engine->getEntityList()->end())
-				{
-					if (*iter) {
-
-						if ( (*iter)->getAlive() == false ) 
-						{
-							delete (*iter);
-							iter = g_engine->getEntityList()->erase( iter );
-						}
-						else {
-							iter++;
-							if (gameover) break;
-						}
-					}	
-				}
-				if (gameover) break;
-
-	        	pthread_mutex_unlock(&g_engine->mutex);
-			} //if
-	    } //gameover
-
-	    pthread_exit(NULL);
-	    return NULL;
-
-	}
-
 } //namespace
-
-

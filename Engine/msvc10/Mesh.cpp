@@ -101,14 +101,14 @@ namespace Advanced2D {
 	}
 	
 	
-	void Mesh::CreateSphere(float radius, int slices, int stacks)
+	void Mesh::CreateSphere(double radius, int slices, int stacks)
 	{
-		D3DXCreateSphere(g_engine->getDevice(), radius, slices, stacks, &mesh, NULL);
+		D3DXCreateSphere(g_engine->getDevice(), (float)radius, slices, stacks, &mesh, NULL);
 	}
 	
-	void Mesh::CreateCube(float width, float height, float depth)
+	void Mesh::CreateCube(double width, double height, double depth)
 	{
-		D3DXCreateBox(g_engine->getDevice(), width, height, depth, &mesh, NULL);
+		D3DXCreateBox(g_engine->getDevice(), (float)width, (float)height, (float)depth, &mesh, NULL);
 	}
 	
 
@@ -148,10 +148,10 @@ namespace Advanced2D {
 	void Mesh::Transform()
 	{
 		//set rotation matrix
-		float x = D3DXToRadian(rotation.x);
-		float y = D3DXToRadian(rotation.y);
-		float z = D3DXToRadian(rotation.z);
-		D3DXMatrixRotationYawPitchRoll(&matRotate, x, y, z);
+		double x = D3DXToRadian(rotation.x);
+		double y = D3DXToRadian(rotation.y);
+		double z = D3DXToRadian(rotation.z);
+		D3DXMatrixRotationYawPitchRoll(&matRotate, (float)x, (float)y, (float)z);
 	
 		//set scaling matrix
 		D3DXMatrixScaling(&matScale, scale.x, scale.y, scale.z);
@@ -169,11 +169,11 @@ namespace Advanced2D {
 		Rotate(rot.x,rot.y,rot.z);
 	}
 	
-	void Mesh::Rotate(float x,float y,float z)
+	void Mesh::Rotate(double x,double y,double z)
 	{
-		rotation.x += x;
-		rotation.y += y;
-		rotation.z += z;
+		rotation.x += (float)x;
+		rotation.y += (float)y;
+		rotation.z += (float)z;
 	}
 	
 //*****modified in chapter 7 - update listing in chapter 2
@@ -185,7 +185,7 @@ namespace Advanced2D {
 	    position.z += velocity.z;
 	}
 	
-	void Mesh::LimitBoundary(float left,float right,float top,float bottom,float back,float front) 
+	void Mesh::LimitBoundary(double left,double right,double top,double bottom,double back,double front) 
 	{
 	    if (position.x < left || position.x > right) {
 	        velocity.x *= -1;

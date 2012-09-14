@@ -16,6 +16,7 @@ namespace Advanced2D {
 		double bottom;
 
 	public:
+        Rect();
 		Rect(int left,int top,int right,int bottom);
 		Rect(double left,double top,double right,double bottom);
 		virtual ~Rect() { }
@@ -24,7 +25,7 @@ namespace Advanced2D {
 		double getTop() { return top; }
 		double getRight() { return right; }
 		double getBottom() { return bottom; }
-
+		
 		double getWidth() { return right-left; }
 		double getHeight() { return bottom-top; }
 
