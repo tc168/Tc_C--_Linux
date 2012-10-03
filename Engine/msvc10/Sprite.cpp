@@ -123,6 +123,7 @@ namespace Advanced2D {
 		}
 	}
 
+
     Rect Sprite::getBounds()
     {
     	Rect rect;

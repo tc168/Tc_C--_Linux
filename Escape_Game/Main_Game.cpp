@@ -8,12 +8,10 @@ Description: Demonstrates the use of Lua library
 using namespace Advanced2D;
 
 
-#define OBJECT_BACKGROUND 99
-#define CHARCTER_DOWN 1
-#define CHARCTER_LEFT 2
-#define CHARCTER_RIGHT 3
-#define CHARCTER_UP 4
-#define OBJECT_SPRITE 100
+#define OBJECT_BORDER 99
+#define OBJECT_BACKGROUND 100
+#define OBJECT_CHARACTER 1
+#define CHARACTER_SPEED 10
 #define MAX 50
 #define SCALE_OF_TILE 5
 #define COL 12 
@@ -24,14 +22,13 @@ using namespace Advanced2D;
 //Font *font;
 //Script script;
 
-std::string title;
-int width;
-int height;
-int depth;
-bool fullscreen;
-Texture* Tile;
+
+
 int map [ROW][COL];
 Sprite *character;
+int keypress_arrowkey;
+boolean key_release = false; 
+boolean win_flag = false;
 
 
 bool game_preload() 
@@ -50,7 +47,7 @@ bool game_preload()
 bool game_init(HWND) 
 {
 
-	
+
 
 	Sprite *background ;
 
@@ -62,62 +59,49 @@ bool game_init(HWND)
 			//	row = 
 			if( i == 0 || i == ROW-1 || j == 0|| j== COL-1){
 				background->loadImage("./Resources/Border.bmp");
+				background->setObjectType(OBJECT_BORDER);
+				background->setCollidable(true);
 			}
 			else{
 				background->loadImage("./Resources/Tiles.bmp");
+				background->setObjectType(OBJECT_BACKGROUND);
+				background->setCollidable(true);
 			}
-			background->setObjectType(OBJECT_BACKGROUND);
+
+			map[i][j] = background->getObjectType();
 
 			background->setSize(18,18);
-
 			background->setScale(5);
 			background->setPosition(j*TILESIZE*SCALE_OF_TILE,i*TILESIZE*SCALE_OF_TILE);
-			//background->
+
 			g_engine->addEntity(background);
-			//}
 		}
 	}
 
-	
 
-	char buff[50];
 
-	 character = new Sprite();
 
-	 character->setObjectType(CHARCTER_DOWN);
-	
-	 sprintf(buff,"./Resources/character_%i.tga",character->getObjectType());
 
-    
+	character = new Sprite();
+	character->loadImage("./Resources/character.tga");
+	character->setCurrentFrame(0);
+	character->setTotalFrames(12);
+	character->setColumns(3);
+	character->setAnimationDirection(0);
+	character->setSize(32,32);
+	character->setObjectType(OBJECT_CHARACTER);
+	character->setCollidable(true);
+	character->setPosition( SCREENW/2-character->getWidth()/2, SCREENH/2-character->getHeight()/2 );
+	character->setFrameTimer(60);
 
-	character->loadImage(buff);
-	 character->setTotalFrames(3);
-	  character->setColumns(3);
-	   character->setSize(32,32);
-    character->setPosition( 10, SCREENH/2-character->getHeight()/2 );
-	// character->setFrameTimer( rand() % 100 );
-      //  character->setCurrentFrame( rand() % 64 );
-		character->setScale(3);
-    g_engine->addEntity(character);
+	character->setScale(3);
+	g_engine->addEntity(character);
 
 
 
 
 
 
-	/*//load the Verdana10 font
-	font = new Font();
-	if (!font->loadImage("verdana10.tga")) {
-	g_engine->message("Error loading verdana10.tga");
-	return false;
-	}
-	if (!font->loadWidthData("verdana10.dat")) {
-	g_engine->message("Error loading verdana10.dat");
-	return false;
-	}
-	font->setColumns(16);
-	font->setCharSize(20,16);
-	*/
 	return true;
 }
 
@@ -125,23 +109,7 @@ void game_render2d()
 {
 	std::ostringstream ostr;
 
-	/*	font->Print(10,20,title);
 
-	ostr << "Screen Width: " << width;
-	font->Print(10,40,ostr.str());
-
-	ostr.str("");
-	ostr << "Screen Height: " << height;
-	font->Print(10,60,ostr.str());
-
-	ostr.str("");
-	ostr << "Color Depth: " << depth;
-	font->Print(10,80,ostr.str());
-
-	ostr.str("");
-	ostr << "Fullscreen: " << fullscreen;
-	font->Print(10,100,ostr.str());
-	*/
 }
 
 void game_end() 
@@ -152,11 +120,30 @@ void game_end()
 
 void game_keyRelease(int key) 
 { 
+
+
 	switch (key) {
 	case DIK_ESCAPE:
+		win_flag = true;
 		g_engine->Close();
 		break;
-	}
+
+
+
+
+	case DIK_DOWN:
+	case DIK_LEFT:	
+	case DIK_RIGHT:
+	case DIK_UP:
+		key_release = false;
+		if (character->getCurrentFrame() == 0 ||character->getCurrentFrame() == 3 || character->getCurrentFrame() == 6 || character->getCurrentFrame() == 9 ){
+			//;
+
+			break;
+
+		}
+	} 
+	//character->setCurrentFrame(keypress_arrowkey);
 }
 
 void game_render3d()
@@ -167,11 +154,82 @@ void game_render3d()
 void game_update() { }
 void game_keyPress(int key) { 
 
+
+	if (key == DIK_DOWN ||key == DIK_LEFT ||key == DIK_RIGHT||key==DIK_UP){
+		key_release = true;
+		
+		switch (key) {
+
+		case DIK_DOWN:
+
+			keypress_arrowkey = 0;
+			character->setVelocity(0,CHARACTER_SPEED);
+
+			break;
+		case DIK_LEFT:
+
+			keypress_arrowkey = 3;
+			character->setVelocity(-CHARACTER_SPEED,0);
+
+			break;
+		case DIK_RIGHT:
+			character->setVelocity(CHARACTER_SPEED,0);
+			keypress_arrowkey = 6;
+
+			break;
+		case DIK_UP:
+			keypress_arrowkey = 9;
+			character->setVelocity(0,-CHARACTER_SPEED);
+			break;
+
+		}
+		if (character->getCurrentFrame() == 0 ||character->getCurrentFrame() == 3 || character->getCurrentFrame() == 6 || character->getCurrentFrame() == 9 ){
+			character->setCurrentFrame(keypress_arrowkey);
+			
+		}
+	}
+
 }
 void game_mouseButton(int button) { }
 void game_mouseMotion(int x,int y) { }
 void game_mouseMove(int x,int y) { }
 void game_mouseWheel(int wheel) { }
 void game_entityRender(Advanced2D::Entity* entity) { }
-void game_entityUpdate(Advanced2D::Entity* entity) { }
-void game_entityCollision(Advanced2D::Entity* entity1,Advanced2D::Entity* entity2) { }
+void game_entityUpdate(Advanced2D::Entity* entity) {
+	Sprite* sprite = (Sprite*)entity;
+
+	if (sprite->getObjectType() == OBJECT_CHARACTER ){
+		if  (sprite->getCurrentFrame() == keypress_arrowkey && key_release == true){
+			character->setAnimationDirection(1);
+		}
+		else if  (character->getCurrentFrame() == 0 ||character->getCurrentFrame() == 3 || character->getCurrentFrame() == 6 || character->getCurrentFrame() == 9   && key_release == false){
+			character->setAnimationDirection(0);
+			character->setVelocity(0,0);
+		}
+		else if (sprite->getCurrentFrame()  == keypress_arrowkey +  sprite->getColumns() -1){
+
+			sprite->setCurrentFrame(keypress_arrowkey) ;
+
+		}
+	}
+
+}
+void game_entityCollision(Advanced2D::Entity* entity1,Advanced2D::Entity* entity2) {
+
+	Sprite *a = (Sprite*)entity1;
+	Sprite *b = (Sprite*)entity2;
+
+	if (a->getObjectType() == OBJECT_CHARACTER && b->getObjectType() == OBJECT_BORDER)
+	{
+
+
+		double x1 = a->getX();
+		double y1 = a->getY();
+
+		double vx1 = a->getVelocity().getX();
+		double vy1 = a->getVelocity().getY();
+		a->setPosition(x1-vx1,y1-vy1);
+	}
+
+}
+

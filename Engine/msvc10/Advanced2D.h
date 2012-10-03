@@ -18,7 +18,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
-#include <cmath>
+#include "cmath"
 
 #define DIRECTINPUT_VERSION 0x0800
 #include <d3d9.h>

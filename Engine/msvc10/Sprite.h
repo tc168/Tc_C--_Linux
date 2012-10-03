@@ -17,6 +17,7 @@ namespace Advanced2D {
 		bool imageLoaded;
 		int state;
 		int direction;
+		
 
 	protected:
 		Texture *image;
@@ -34,6 +35,8 @@ namespace Advanced2D {
 		D3DXMATRIX matScale;
 		void transform();
 		D3DCOLOR color;
+		//bool hasCollided; 
+
 	
 	public:
 		Sprite();
@@ -42,6 +45,7 @@ namespace Advanced2D {
 		void setImage(Texture *);
 		void move();
 		void animate();
+		void animate(int input_offset);
 		void draw();
 
 		//screen position
@@ -103,6 +107,11 @@ namespace Advanced2D {
 		CollisionType getCollisionMethod() { return collisionMethod; }
 		void setCollisionMethod(CollisionType type) { collisionMethod = type; }
         Rect getBounds();
+
+		//void sethasCollided(bool value) { hasCollided = value; }
+		//bool gethasCollided() { return hasCollided; }
+
+	
 
 	}; //class
 };
